@@ -38,8 +38,8 @@ class Board:
 		 [#, #, #, #, #, #, #, #, #],
 		 [#, #, #, #, #, #, #, #, #]]
 	'''
-	def __init__(self, board):
-		self.board = board
+	def __init__(self):
+		self.board = [[]]
 
 	def __str__(self):
 		try:
@@ -88,25 +88,34 @@ class Board:
 		finally: return '' 
 
 	def check_row(self, x_coordinate, num):
-		for i in range(0, 9):
-			if self.board[x_coordinate][i] == num: return False
-		return True
+		try:
+			for i in range(0, 9):
+				if self.board[x_coordinate][i] == num: return False
+			return True
+		except IndexError:
+			print("Cannot check this board's rows!")
+			return ''
 
 	def check_col(self, y_coordinate, num):
-		for i in range(0, 9):
-			if self.board[i][y_coordinate] == num: return False
-		return True
+		try:
+			for i in range(0, 9):
+				if self.board[i][y_coordinate] == num: return False
+			return True
+		except IndexError: 
+			print("Cannot check this board's columns!")
+			return ''
 
 	def check_box(self, x_coordinate, y_coordinate, num):
 		box_row = (x_coordinate // 3) * 3
 		box_col = (y_coordinate // 3) * 3
-		for i in range(0, 3):
-			for j in range(0, 3):
-				if self.board[box_row + i][box_col + j] == num: return False
-		return True
-
-	def valid(self, x_coordinate, y_coordinate, num):
-		return (self.check_row(x_coordinate, num) and self.check_col(y_coordinate, num) and self.check_box(x_coordinate, y_coordinate, num))
+		try:
+			for i in range(0, 3):
+				for j in range(0, 3):
+					if self.board[box_row + i][box_col + j] == num: return False
+			return True
+		except IndexError:
+			print("Cannot check this board's 3x3 grids!")
+			return ''
 
 
 if __name__ == "__main__":
@@ -130,8 +139,12 @@ if __name__ == "__main__":
 					[3, 0, 0, 0, 0, 0, 0, 0, 0],
 					[2, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-	board_true = Board(board_input1)
-	board_false = Board(board_input2)
+	board_true = Board()
+	board_false = Board()
+	board_none = Board()
+
+	board_true.board = board_input1
+	board_false.board = board_input2
 
 	print("Board 1:")
 	print('{}'.format(board_true))
@@ -139,5 +152,9 @@ if __name__ == "__main__":
 	print("Board 2:")
 	print('{}'.format(board_false))
 
+	print("Board 3:")
+	print('{}'.format(board_none))
+
 	print("Column 2 does not contain the number 5: {}".format(board_true.check_col(2, 5)))
 	print("Column 2 does not contain the number 5: {}".format(board_false.check_col(2, 5)))
+	print("Column 2 does not contain the number 5: {}".format(board_none.check_col(2, 5)))

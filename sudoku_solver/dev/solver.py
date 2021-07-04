@@ -6,22 +6,46 @@ from solution import Solution
 class Solver:
 	'''
 	METHODS:
-		- check row -> bool
-		- check column -> bool
-		- check box -> bool
 		- validate number -> bool
 		- find next number -> returns next coordinates to calculate number
 		- solve -> uses new number to calculate current square
+
+	ATTRIBUTES:
+		- Puzzle object for solving
+		- Solution object
 	'''
-	def __init__(self):
-		pass
+	def __init__(self, input_file, output_file):
+		self.puzzle = Puzzle(input_file)
+		self.solution = Solution(output_file)
 
 	def find_next(self):
-		pass
+		for i in range(0, 9):
+			for j in range(0, 9):
+				if self.puzzle.board[i][j] == 0:
+					return (i, j)
+		return False
 
 	def solve(self):
-		pass
+		find = self.find_next()
+		if not find:
+			print('{}'.format(self.puzzle))
+			print('Completed!')
+			return True
+		else:
+			row, col = find
+
+		for i in range(1, 10):
+			if self.puzzle.check_row(row, i) and self.puzzle.check_col(col, i) and self.puzzle.check_box(row, col, i):
+				self.puzzle.board[row][col] = i
+				print('{}'.format(self.puzzle))
+				print('\n')
+				if self.solve(): return True
+				self.puzzle.board[row][col] = 0
+		return False
 
 
 if __name__ == "__main__":
-	pass
+	file_input = str(input("Enter an input file name: "))
+	file_output = str(input("Enter an output filename: "))
+	solver = Solver(file_input, file_output)
+	solver.solve()
