@@ -15,8 +15,9 @@ class Solver:
 		- Solution object
 	'''
 	def __init__(self, input_file, output_file):
-		self.puzzle = Puzzle(input_file)
-		self.solution = Solution(output_file)
+		self.input_file = input_file
+		self.output_file = output_file
+		self.puzzle = Puzzle(self.input_file)
 
 	def find_next(self):
 		for i in range(0, 9):
@@ -29,6 +30,8 @@ class Solver:
 		find = self.find_next()
 		if not find:
 			print('{}'.format(self.puzzle))
+			self.solution = Solution(self.output_file, self.puzzle.board)
+			self.solution.generate_output()
 			print('Completed!')
 			return True
 		else:
