@@ -9,6 +9,7 @@ class Solver:
 		- validate number -> bool
 		- find next number -> returns next coordinates to calculate number
 		- solve -> uses new number to calculate current square
+		- ability to differentiate between file_io and input_io
 
 	ATTRIBUTES:
 		- Puzzle object for solving
