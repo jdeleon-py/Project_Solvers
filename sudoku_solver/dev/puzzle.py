@@ -53,10 +53,10 @@ class Puzzle(Board):
 
 
 if __name__ == "__main__":
-	puzzle1 = Puzzle('input1.txt')
-	puzzle2 = Puzzle('input2.txt')
-	puzzle3 = Puzzle('input3.txt')
-	puzzle4 = Puzzle('input4.txt')
+	puzzle1 = Puzzle('../lib/test_files/input1.txt')
+	puzzle2 = Puzzle('../lib/test_files/input2.txt')
+	puzzle3 = Puzzle('../lib/test_files/input3.txt')
+	puzzle4 = Puzzle('../lib/test_files/input4.txt')
 
 	print('{}'.format(puzzle1))
 	print('{}'.format(puzzle2))
