@@ -16,12 +16,15 @@ class MyThread(threading.Thread):
 
 	def run(self):
 		print("Starting {}".format(self.name))
-		threadLock.acquire()
-		threadLock.release()
+		#threadLock.acquire()
+		#threadLock.release()
 		for index in self.arr:
-			solver = Solver(index, '../lib/test_files/out' + self.threadID)
+			solver = Solver(index, '../lib/output_files/out' + self.define_id(index) + '.txt')
 			solver.solve()
 		print("Exiting {}".format(self.name))
+
+	def define_id(self, filename):
+		return filename.split('input')[1].split('.txt')[0]
 
 
 if __name__ == "__main__":
@@ -36,10 +39,10 @@ if __name__ == "__main__":
 	FILE_ARR3 = ['../lib/test_files/input7.txt']
 	FILE_ARR4 = ['../lib/test_files/input8.txt']
 
-	threads.append(MyThread(5, "Thread 1", FILE_ARR1))
-	threads.append(MyThread(6, "Thread 2", FILE_ARR2))
-	threads.append(MyThread(7, "Thread 3", FILE_ARR3))
-	threads.append(MyThread(8, "Thread 4", FILE_ARR4))
+	threads.append(MyThread(1, "Thread 1", FILE_ARR1))
+	threads.append(MyThread(2, "Thread 2", FILE_ARR2))
+	threads.append(MyThread(3, "Thread 3", FILE_ARR3))
+	threads.append(MyThread(4, "Thread 4", FILE_ARR4))
 
 	for thread in threads: thread.start()
 	for thread in threads: thread.join()

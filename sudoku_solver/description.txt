@@ -24,3 +24,25 @@
 
 - etc/
 	- storage container for ideas to enhance the application.
+
+
+*** THREAD TEST ***
+In this investigation, a series of 10,000 puzzles will be solved three times with three variations of threads. Three trials of one thread, two threads, and four threads will measure the average computation time for each variation.
+
+- ONE THREAD
+	- Trial #1:		249.604 sec
+	- Trial #2:		236.407 sec
+	- Trial #3:		243.334 sec
+	- Avg. Computation Time: 243.115 sec
+
+- TWO THREADS
+	- Trial #1:		386.183 sec
+	- Trial #2:		334.005 sec
+	- Trial #3:		331.524 sec
+	- Avg. Computation Time: 350.571 sec
+
+- FOUR THREADS
+	- Trial #1:		368.730 sec
+	- Trial #2:		329.609 sec
+	- Trial #3:		290.868 sec
+	- Avg. Computation Time: 329.736 sec
