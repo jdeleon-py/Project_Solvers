@@ -11,19 +11,21 @@ class Solution(Board):
 		- output file
 		- data to be written to file
 	'''
-	def __init__(self, file, data):
+	def __init__(self, data, file):
 		Board.__init__(self)
-		self.file = file
 		self.data = data
+		self.file = file
 
 	def generate_output(self):
-		with open(self.file, 'w') as write_file:
-			for row in self.data:
-				for digit in row:
-					write_file.write(str(digit))
-				write_file.write('\n')
-		write_file.close()
-
+		try:
+			with open(self.file, 'w') as write_file:
+				for row in self.data:
+					for digit in row:
+						write_file.write(str(digit))
+					write_file.write('\n')
+			write_file.close()
+		except:
+			print('{}'.format(self.data))
 
 if __name__ == "__main__":
 	pass

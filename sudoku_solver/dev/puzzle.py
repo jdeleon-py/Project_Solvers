@@ -15,20 +15,34 @@ class Puzzle(Board):
 
 	ATTRIBUTES:
 		- Board object
+		- io_type defined
+		- [False, True] -> file i/o
+		- [True, False] -> user i/o
 	'''
-	def __init__(self, file):
+	def __init__(self, data, io_type = [False, False]):
 		Board.__init__(self)
-		self.file = file
-		self.board = self.generate_board()
+		self.data = data
+		self.io_type = io_type
 
-	def generate_board(self):
+		if self.io_type == [False, True]:
+			self.board = self.generate_board(self.data)
+
+		elif self.io_type == [True, False]:
+			self.board = self.data
+
+		else:
+			self.board = None
+
+	def generate_board(self, filepath):
 		try:
-			with open(self.file, 'r') as file:
+			with open(filepath, 'r') as file:
 				data = file.read()
 			file.close()
 			data = [[int(digit) for digit in row] for row in data.split('\n')[:-1]]
+
 		except:
 			data = None
+
 		finally:
 			return self.verify_board(data)
 
@@ -53,12 +67,26 @@ class Puzzle(Board):
 
 
 if __name__ == "__main__":
-	puzzle1 = Puzzle('../lib/test_files/input1.txt')
-	puzzle2 = Puzzle('../lib/test_files/input2.txt')
-	puzzle3 = Puzzle('../lib/test_files/input3.txt')
-	puzzle4 = Puzzle('../lib/test_files/input4.txt')
+	puzzle1 = Puzzle('../lib/test_files/input1.txt', io_type = [False, True])
+	puzzle2 = Puzzle('../lib/test_files/input2.txt', io_type = [False, True])
+	puzzle3 = Puzzle('../lib/test_files/input3.txt', io_type = [False, True])
+	puzzle4 = Puzzle('../lib/test_files/input4.txt', io_type = [False, True])
 
 	print('{}'.format(puzzle1))
 	print('{}'.format(puzzle2))
 	print('{}'.format(puzzle3))
 	print('{}'.format(puzzle4))
+
+	board_input = [[1, 2, 3, 4, 5, 6, 7, 8, 9],
+					[9, 6, 7, 0, 0, 0, 0, 0, 0],
+					[8, 4, 5, 0, 0, 0, 0, 0, 0],
+					[7, 0, 0, 0, 0, 0, 0, 0, 0],
+					[6, 0, 0, 0, 0, 0, 0, 0, 0],
+					[5, 0, 0, 0, 0, 0, 0, 0, 0],
+					[4, 0, 0, 0, 0, 0, 0, 0, 0],
+					[3, 0, 0, 0, 0, 0, 0, 0, 0],
+					[2, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+	puzzle5 = Puzzle(board_input, io_type = [True, False])
+
+	print('{}'.format(puzzle5))

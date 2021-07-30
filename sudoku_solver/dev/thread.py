@@ -19,7 +19,7 @@ class MyThread(threading.Thread):
 		#threadLock.acquire()
 		#threadLock.release()
 		for index in self.arr:
-			solver = Solver(index, '../lib/output_files/out' + self.define_id(index) + '.txt')
+			solver = Solver(index, '../lib/output_files/out' + self.define_id(index) + '.txt', io_type = [False, True])
 			solver.solve()
 		print("Exiting {}".format(self.name))
 

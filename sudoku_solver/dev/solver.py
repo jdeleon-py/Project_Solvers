@@ -14,11 +14,17 @@ class Solver:
 	ATTRIBUTES:
 		- Puzzle object for solving
 		- Solution object
+		- io_type defined
+		- [False, True] -> file i/o
+		- [True, False] -> user i/o
 	'''
-	def __init__(self, input_file, output_file):
-		self.input_file = input_file
-		self.output_file = output_file
-		self.puzzle = Puzzle(self.input_file)
+	def __init__(self, data, outfile = None, io_type = [False, False]):
+		self.data = data
+		self.outfile = outfile
+		self.io_type = io_type
+
+		self.puzzle = Puzzle(self.data, self.io_type)
+		self.solution = Solution(self.puzzle.board, self.outfile)
 
 	def find_next(self):
 		for i in range(0, 9):
@@ -31,7 +37,7 @@ class Solver:
 		find = self.find_next()
 		if not find:
 			print('{}'.format(self.puzzle))
-			self.solution = Solution(self.output_file, self.puzzle.board)
+			self.solution.board = self.puzzle.board
 			self.solution.generate_output()
 			print('Completed!')
 			return True
@@ -49,7 +55,17 @@ class Solver:
 
 
 if __name__ == "__main__":
-	file_input = str(input("Enter an input file name: "))
-	file_output = str(input("Enter an output filename: "))
-	solver = Solver(file_input, file_output)
+	board_input1 = [[1, 2, 3, 4, 5, 6, 7, 8, 9],
+					[9, 6, 7, 0, 0, 0, 0, 0, 0],
+					[8, 4, 5, 0, 0, 0, 0, 0, 0],
+					[7, 0, 0, 0, 0, 0, 0, 0, 0],
+					[6, 0, 0, 0, 0, 0, 0, 0, 0],
+					[5, 0, 0, 0, 0, 0, 0, 0, 0],
+					[4, 0, 0, 0, 0, 0, 0, 0, 0],
+					[3, 0, 0, 0, 0, 0, 0, 0, 0],
+					[2, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+	#file_input = str(input("Enter an input file name: "))
+	#file_output = str(input("Enter an output filename: "))
+	solver = Solver(board_input1, io_type = [True, False])
 	solver.solve()
