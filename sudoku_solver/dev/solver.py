@@ -18,10 +18,11 @@ class Solver:
 		- [False, True] -> file i/o
 		- [True, False] -> user i/o
 	'''
-	def __init__(self, data, outfile = None, io_type = [False, False]):
+	def __init__(self, data, outfile = None, io_type = [False, False], verbose = True):
 		self.data = data
 		self.outfile = outfile
 		self.io_type = io_type
+		self.verbose = verbose
 
 		self.puzzle = Puzzle(self.data, self.io_type)
 		self.solution = Solution(self.puzzle.board, self.outfile)
@@ -36,10 +37,10 @@ class Solver:
 	def solve(self):
 		find = self.find_next()
 		if not find:
-			print('{}'.format(self.puzzle))
+			if self.verbose: print('{}'.format(self.puzzle))
 			self.solution.board = self.puzzle.board
 			self.solution.generate_output()
-			print('Completed!')
+			if self.verbose: print('Completed!')
 			return True
 		else:
 			row, col = find
@@ -47,8 +48,8 @@ class Solver:
 		for i in range(1, 10):
 			if self.puzzle.check_row(row, i) and self.puzzle.check_col(col, i) and self.puzzle.check_box(row, col, i):
 				self.puzzle.board[row][col] = i
-				print('{}'.format(self.puzzle))
-				print('\n')
+				if self.verbose: print('{}'.format(self.puzzle))
+				if self.verbose: print('\n')
 				if self.solve(): return True
 				self.puzzle.board[row][col] = 0
 		return False
@@ -67,5 +68,5 @@ if __name__ == "__main__":
 
 	#file_input = str(input("Enter an input file name: "))
 	#file_output = str(input("Enter an output filename: "))
-	solver = Solver(board_input1, io_type = [True, False])
+	solver = Solver(board_input1, io_type = [True, False], verbose = True)
 	solver.solve()

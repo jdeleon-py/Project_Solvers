@@ -25,7 +25,7 @@ class Solution(Board):
 					write_file.write('\n')
 			write_file.close()
 		except:
-			print('{}'.format(self.data))
+			pass
 
 if __name__ == "__main__":
 	pass
