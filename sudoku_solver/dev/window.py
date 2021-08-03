@@ -7,10 +7,18 @@ from solver import Solver
 class Window:
 	'''
 	METHODS:
-	-
+	- ability to draw a 9x9 grid of lines representing the sudoku board
+	- ability to draw each digit onto each square outlined by the 9x9 grid
+	- ability to exit the pygame window
+	- ability to run the pygame window in a loop while True
 
 	ATTRIBUTES:
-	-
+	- screen object to display grid and text
+	- font object to display text
+	- text array to compartmentalize the 9x9 grid of text objects
+	- clock object to keep a steady time of the pygame window
+	- 2-D array (board) data to draw onto the pygame window
+	- solver object to feed the board data into
 	'''
 	def __init__(self, data):
 		pygame.init()
@@ -20,16 +28,12 @@ class Window:
 		self.clock = pygame.time.Clock()
 
 		self.data = data
-		self.count = 0
 		
 		self.solver = Solver(self.data, io_type = [True, False], verbose = False)
 		self.draw_text(self.data)
 
 		self.solver.solve()
 		self.running = True
-
-	def solver_algorithm(self):
-		pass
 
 	def draw_board(self):
 		for i in range(50, 450, 40):
@@ -53,7 +57,6 @@ class Window:
 				self.textRect = self.text.get_rect()					# create a rectangular object for the text surface object
 				self.textRect.center = ((40 * i) + 70, (40 * j) + 70)	# set the center of the rectangular object.
 				self.text_arr.append([self.text, self.textRect])
-				self.count += 1
 
 	def exit_window(self):
 		return pygame.quit()
@@ -62,7 +65,6 @@ class Window:
 		while self.running:
 			# fill the background with white
 			self.screen.fill((255, 255, 255))
-			self.count = 0
 
 			for text in self.text_arr: self.screen.blit(text[0], text[1])
 
@@ -76,6 +78,7 @@ class Window:
 			# updates contents to the screen
 			pygame.display.flip()
 			self.clock.tick(30) # Ensure the program maintains a rate of 30 frames per second!
+
 
 if __name__ == '__main__':
 	data = [[1, 2, 3, 4, 5, 6, 7, 8, 9],

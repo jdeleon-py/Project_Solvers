@@ -12,9 +12,16 @@ class App:
 	- ability to save the contents of the board out to a file
 	- ability to solve a puzzle interactively by opening a pygame window
 	- ability to reset the board by setting the board's contents to 0
+	- ability to translate the contents of a file onto a sudoku board - vice versa
+	- ability to reshape an array of board data into something readable by the solver
 
 	ATTRIBUTES:
-	- 
+	- 1-D board array that is updated via file i/o or user i/o; converted to 2-D array to solve
+	- 9x9 grid of Entry boxes for gui input
+	- Button to open an existing puzzle file
+	- Button to save a board's content to a file
+	- Button to solve a board's contents
+	- Button to reset a board's contents to 0
 	'''
 	def __init__(self, master):
 		self.frame = Frame(master)
@@ -27,10 +34,10 @@ class App:
 		self.reset_button = Button(self.frame, text = 'Reset', command = self.reset).grid(row = 13, columnspan = 9)
 
 	def open(self):
+		self.board_arr = []
 		file = askopenfile()
 		data = file.read()
 		data = [[int(digit) for digit in row] for row in data.split('\n')[:-1]]
-		self.board_arr = []
 		for row in data:
 			for digit in row:
 				self.board_arr.append(digit)
@@ -55,7 +62,6 @@ class App:
 	def populate_board(self, entry = True):
 		if entry:
 			self.board_arr = []
-
 			for i in range(0, 81):
 				board_index = Entry(self.frame, textvariable = IntVar(), bd = 5, width = 2)
 				board_index.grid(row = (i // 9), column = i % 9)
