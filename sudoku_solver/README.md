@@ -46,3 +46,13 @@ In this investigation, a series of 10,000 puzzles will be solved three times wit
 	- Trial #2:		329.609 sec
 	- Trial #3:		290.868 sec
 	- Avg. Computation Time: 329.736 sec
+
+## Build Specifications
+
+If you are interested in creating a similar project, the 'requirements.txt' folder contains the necessary libraries used 
+to complete the projects in this repository. This project can be built using a conda virtual environment. Run this command to install the 
+required Python libraries listed in the file 'requirements.txt'.
+
+```bash
+conda create --name <env_name> --file requirements.txt
+```
