@@ -26,7 +26,7 @@
 	- storage container for ideas to enhance the application.
 
 
-### Results
+### Results: User Input
 
 ![Puzzle submitted by user input](etc/outputs/user_puzzle.png)
 
