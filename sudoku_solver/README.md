@@ -26,6 +26,12 @@
 	- storage container for ideas to enhance the application.
 
 
+### Results
+
+![Puzzle submitted by user input](etc/outputs/user_puzzle.png)
+
+![User input puzzle solved](etc/outputs/user_solved.png)
+
 *** THREAD TEST ***
 In this investigation, a series of 10,000 puzzles will be solved three times with three variations of threads. Three trials of one thread, two threads, and four threads will measure the average computation time for each variation.
 
