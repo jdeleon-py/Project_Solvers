@@ -216,16 +216,73 @@ Matrix* m_rref(Matrix* mat)
 		val = mat -> arr[r][lead];
 		m_row_scale(mat, r, 1 / val);
 
-		
+
 	}
 }
 
 Matrix* m_inv(Matrix* mat);
 
+// RETURN MATRIX* OR VOID???
 Matrix* m_adj(Matrix* mat)
 {
 	// in a field of real-numbers, adj(T) = transpose(T)
+	// for a real-valued matrix
+
+	if(mat == NULL || mat -> arr == NULL)
+	{
+		printf("Error (adj), can not find matrix.\n");
+		return NULL;
+	}
+
+	Matrix* mat_adj = m_build(mat -> rows, mat -> cols);
+	m_type temp_val;
+	unsigned int r, c;
+
+	// TODO: OPTIMIZE THIS
+	// new array is populated with old array
+	for(r = 0; r < mat -> rows; r++)
+	{
+		for(c = 0; c < mat -> cols; c++)
+		{
+			mat_adj -> arr[r][c] = mat -> arr[r][c];
+		}
+	}
+
+	// operates on a matrix in-place
+	for(r = 0; r < mat -> rows; r++)
+	{
+		for(c = r + 1; c < mat -> cols; c++)
+		{
+			temp_val = mat_adj -> arr[r][c];
+			mat_adj -> arr[r][c] = mat_adj -> arr[c][r];
+			mat_adj -> arr[c][r] = temp_val;
+		}
+	}
+
 	// in a field of complex-numbers, adj(T) = conjugate-transpose(T)
+
+	return mat_adj;
+}
+
+// return a rotated matrix by 90 deg clockwise
+Matrix* m_rot(Matrix* mat)
+{
+	if(mat == NULL || mat -> arr == NULL)
+	{
+		printf("Error (rot), matrix can not be found.\n");
+		return NULL;
+	}
+
+	// build return matrix
+	// transpose original matrix
+	Matrix* mat_rot = m_adj(mat);
+
+	// reverse ordering of each row
+	for(int r = 0; r < mat_rot -> rows; r++)
+	{
+		m_row_rev(mat_rot -> arr[r], mat_rot -> cols);
+	}
+	return mat_rot;
 }
 
 int m_det(Matrix* mat)
@@ -274,7 +331,21 @@ int m_det(Matrix* mat)
 	*/
 }
 
-int m_tr(Matrix* mat);
+int m_tr(Matrix* mat)
+{
+	if(mat == NULL)
+	{
+		printf("Error -- tr(), matrix can not be found.\n");
+		return -1;
+	}
+
+	int trace = 0;
+	for(int i = 0; i < mat -> rows; i++)
+	{
+		trace += mat -> arr[i][i];
+	}
+	return trace;
+}
 
 // - RREF UTILITIES
 void m_row_swap(Matrix* mat, unsigned int row1, unsigned int row2)
@@ -297,6 +368,24 @@ void m_row_scale(Matrix* mat, unsigned int row, m_type num)
 	for(int i = 0; i < mat -> cols; i++)
 	{
 		mat -> arr[row][i] *= num;
+	}
+}
+
+// - ROTATION UTILITIES
+void m_row_rev(int* row, int row_size)
+{
+	int start = 0, end = row_size - 1;
+	m_type temp_val;
+
+	// reverse the order of elements in the row
+	// slide a window from the edges towards the middle
+	while(start < end)
+	{
+		temp_val = row[start];
+		row[start] = row[end];
+		row[end] = temp_val;
+
+		start++; end--;
 	}
 }
 
