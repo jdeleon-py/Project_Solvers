@@ -85,7 +85,7 @@ void m_print(Matrix* mat)
 	for(r = 0; r < mat -> rows; r++)
 	{
 		printf("  %d|", r);
-		for(int c = 0; c < mat -> cols; c++) printf("%7d| ", mat -> arr[r][c]);
+		for(c = 0; c < mat -> cols; c++) printf("%7d| ", mat -> arr[r][c]);
 		printf("\n");
 	}
 }
@@ -193,10 +193,7 @@ Matrix* m_rref(Matrix* mat)
 	m_type val;
 	for(int r = 0; r < mat -> rows; r++)
 	{
-		if(mat -> cols <= lead)
-		{
-			break;
-		}
+		if(mat -> cols <= lead) break;
 
 		i = r;
 		while(mat -> arr[i][lead] == 0)
