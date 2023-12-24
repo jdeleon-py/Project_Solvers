@@ -20,11 +20,11 @@ typedef struct Matrix
 	unsigned int dim, rows, cols;
 	// bool is_complex;
 
-	m_type** arr;
+	m_type** mat_arr;
 } Matrix;
 
 // MATRIX DE/INIT OPERATIONS
-Matrix* m_build(unsigned int n_rows, unsigned int n_cols);
+Matrix* m_build(const char* title, unsigned int n_rows, unsigned int n_cols);
 Matrix* m_build_file(const char* filename);
 void m_print(Matrix* mat);
 void m_destroy(Matrix* mat);

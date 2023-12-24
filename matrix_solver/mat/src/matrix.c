@@ -4,7 +4,7 @@
 #include "matrix.h"
 
 // MATRIX DE/INIT UTILITIES
-Matrix* m_build(unsigned int n_rows, unsigned int n_cols)
+Matrix* m_build(const char* title, unsigned int n_rows, unsigned int n_cols)
 {
 	Matrix* new_mat = NULL;
 
@@ -14,14 +14,16 @@ Matrix* m_build(unsigned int n_rows, unsigned int n_cols)
 		printf("Error, failed to build matrix.\n");
 		return NULL;
 	}
+	new_mat -> filename = NULL;
+	new_mat -> title = title;
 	new_mat -> rows = n_rows;
 	new_mat -> cols = n_cols;
 	new_mat -> dim = (n_rows == n_cols) ? n_rows : 0;
 
-	new_mat -> arr = (m_type**)malloc(n_rows * sizeof(m_type*));
+	new_mat -> mat_arr = (m_type**)malloc(n_rows * sizeof(m_type*));
 	for(int i = 0; i < n_rows; i++)
 	{
-		new_mat -> arr[i] = (m_type*)malloc(n_cols * sizeof(m_type));
+		new_mat -> mat_arr[i] = (m_type*)malloc(n_cols * sizeof(m_type));
 	}
 
 	// matrix array will be populated by corresponding function
@@ -50,10 +52,10 @@ Matrix* m_build_file(const char* filename)
 	new_matrix -> cols = num_cols;
 	new_matrix -> dim = (num_rows == num_cols) ? num_rows : 0;
 
-	new_matrix -> arr = (m_type**)malloc(num_rows * sizeof(m_type*));
+	new_matrix -> mat_arr = (m_type**)malloc(num_rows * sizeof(m_type*));
 	for(int i = 0; i < num_rows; i++)
 	{
-		new_matrix -> arr[i] = (m_type*)malloc(num_cols * sizeof(m_type));
+		new_matrix -> mat_arr[i] = (m_type*)malloc(num_cols * sizeof(m_type));
 	}
 	
 	// populate the matrix array
@@ -61,7 +63,7 @@ Matrix* m_build_file(const char* filename)
 	{
 		for(unsigned int c = 0; c < num_cols; c++)
 		{
-			fscanf(mat_file, "%d", &(new_matrix -> arr[r][c]));
+			fscanf(mat_file, "%d", &(new_matrix -> mat_arr[r][c]));
 		}
 	}
 	fclose(mat_file);
@@ -85,7 +87,7 @@ void m_print(Matrix* mat)
 	for(r = 0; r < mat -> rows; r++)
 	{
 		printf("  %d|", r);
-		for(c = 0; c < mat -> cols; c++) printf("%7d| ", mat -> arr[r][c]);
+		for(c = 0; c < mat -> cols; c++) printf("%7d| ", mat -> mat_arr[r][c]);
 		printf("\n");
 	}
 }
@@ -100,9 +102,9 @@ void m_destroy(Matrix* mat)
 
 	for(int r = 0; r < mat -> rows; r++)
 	{
-		free(mat -> arr[r]);
+		free(mat -> mat_arr[r]);
 	}
-	free(mat -> arr);
+	free(mat -> mat_arr);
 	free(mat);
 }
 
@@ -125,7 +127,7 @@ Matrix* m_add(Matrix* mat1, Matrix* mat2)
 	{
 		for(int c = 0; c < mat_sum -> cols; c++)
 		{
-			mat_sum -> arr[r][c] = mat1 -> arr[r][c] + mat2 -> arr[r][c];
+			mat_sum -> mat_arr[r][c] = mat1 -> mat_arr[r][c] + mat2 -> mat_arr[r][c];
 		}
 	}
 	return mat_sum;
@@ -133,7 +135,7 @@ Matrix* m_add(Matrix* mat1, Matrix* mat2)
 
 Matrix* m_scal_mult(Matrix* mat, int num)
 {
-	if(mat == NULL || mat -> arr == NULL)
+	if(mat == NULL || mat -> mat_arr == NULL)
 	{
 		printf("Error, matrix can not be found.\n");
 		return NULL;
@@ -144,7 +146,7 @@ Matrix* m_scal_mult(Matrix* mat, int num)
 	{
 		for(int c = 0; c < mat_prod -> cols; c++)
 		{
-			mat_prod -> arr[r][c] = num * mat -> arr[r][c];
+			mat_prod -> mat_arr[r][c] = num * mat -> mat_arr[r][c];
 		}
 	}
 	return mat_prod;
@@ -171,9 +173,9 @@ Matrix* m_mat_mult(Matrix* mat1, Matrix* mat2)
 			m_type res_num = 0;
 			for(int k = 0; k < mat1 -> cols; k++)
 			{
-				res_num += mat1 -> arr[r][k] * mat2 -> arr[k][c];
+				res_num += mat1 -> mat_arr[r][k] * mat2 -> mat_arr[k][c];
 			}
-			mat_prod -> arr[r][c] = res_num;
+			mat_prod -> mat_arr[r][c] = res_num;
 		}
 	}
 	return mat_prod;
@@ -196,7 +198,7 @@ Matrix* m_rref(Matrix* mat)
 		if(mat -> cols <= lead) break;
 
 		i = r;
-		while(mat -> arr[i][lead] == 0)
+		while(mat -> mat_arr[i][lead] == 0)
 		{
 			i++;
 			if(i == mat -> rows)
@@ -210,7 +212,7 @@ Matrix* m_rref(Matrix* mat)
 			}
 		}
 		m_row_swap(mat, i, r);
-		val = mat -> arr[r][lead];
+		val = mat -> mat_arr[r][lead];
 		m_row_scale(mat, r, 1 / val);
 
 
@@ -225,7 +227,7 @@ Matrix* m_adj(Matrix* mat)
 	// in a field of real-numbers, adj(T) = transpose(T)
 	// for a real-valued matrix
 
-	if(mat == NULL || mat -> arr == NULL)
+	if(mat == NULL || mat -> mat_arr == NULL)
 	{
 		printf("Error (adj), can not find matrix.\n");
 		return NULL;
@@ -241,7 +243,7 @@ Matrix* m_adj(Matrix* mat)
 	{
 		for(c = 0; c < mat -> cols; c++)
 		{
-			mat_adj -> arr[r][c] = mat -> arr[r][c];
+			mat_adj -> mat_arr[r][c] = mat -> mat_arr[r][c];
 		}
 	}
 
@@ -250,9 +252,9 @@ Matrix* m_adj(Matrix* mat)
 	{
 		for(c = r + 1; c < mat -> cols; c++)
 		{
-			temp_val = mat_adj -> arr[r][c];
-			mat_adj -> arr[r][c] = mat_adj -> arr[c][r];
-			mat_adj -> arr[c][r] = temp_val;
+			temp_val = mat_adj -> mat_arr[r][c];
+			mat_adj -> mat_arr[r][c] = mat_adj -> mat_arr[c][r];
+			mat_adj -> mat_arr[c][r] = temp_val;
 		}
 	}
 
@@ -264,7 +266,7 @@ Matrix* m_adj(Matrix* mat)
 // return a rotated matrix by 90 deg clockwise
 Matrix* m_rot(Matrix* mat)
 {
-	if(mat == NULL || mat -> arr == NULL)
+	if(mat == NULL || mat -> mat_arr == NULL)
 	{
 		printf("Error (rot), matrix can not be found.\n");
 		return NULL;
@@ -277,7 +279,7 @@ Matrix* m_rot(Matrix* mat)
 	// reverse ordering of each row
 	for(int r = 0; r < mat_rot -> rows; r++)
 	{
-		m_row_rev(mat_rot -> arr[r], mat_rot -> cols);
+		m_row_rev(mat_rot -> mat_arr[r], mat_rot -> cols);
 	}
 	return mat_rot;
 }
@@ -296,11 +298,11 @@ int m_det(Matrix* mat)
 
 	if(dim == 1)
 	{
-		det = mat -> arr[0][0];
+		det = mat -> mat_arr[0][0];
 	}
 	else if(dim == 2)
 	{
-		det = (mat -> arr[0][0] * mat -> arr[1][1]) - (mat -> arr[0][1] * mat -> arr[1][0]);
+		det = (mat -> mat_arr[0][0] * mat -> mat_arr[1][1]) - (mat -> mat_arr[0][1] * mat -> mat_arr[1][0]);
 	}
 	else
 	{
@@ -312,7 +314,7 @@ int m_det(Matrix* mat)
 				for(int col_idx = 0; col_idx < dim; col_idx++)
 				{
 					if(col_idx == i) continue;
-					temp_mat[h][k] = mat -> arr[row_idx][col_idx];
+					temp_mat[h][k] = mat -> mat_arr[row_idx][col_idx];
 					k++;
 					if(k == dim - 1)
 					{
@@ -321,7 +323,7 @@ int m_det(Matrix* mat)
 					}
 				}
 			}
-			det = det + mat -> arr[0][p] * pow(-1, p) * m_det(temp_mat, dim - 1);
+			det = det + mat -> mat_arr[0][p] * pow(-1, p) * m_det(temp_mat, dim - 1);
 		}
 	}
 	return det;
@@ -339,7 +341,7 @@ int m_tr(Matrix* mat)
 	int trace = 0;
 	for(int i = 0; i < mat -> rows; i++)
 	{
-		trace += mat -> arr[i][i];
+		trace += mat -> mat_arr[i][i];
 	}
 	return trace;
 }
@@ -347,16 +349,16 @@ int m_tr(Matrix* mat)
 // - RREF UTILITIES
 void m_row_swap(Matrix* mat, unsigned int row1, unsigned int row2)
 {
-	m_type* temp_row = mat -> arr[row1];
-	mat -> arr[row1] = mat -> arr[row2];
-	mat -> arr[row2] = temp_row;
+	m_type* temp_row = mat -> mat_arr[row1];
+	mat -> mat_arr[row1] = mat -> mat_arr[row2];
+	mat -> mat_arr[row2] = temp_row;
 }
 
 void m_row_add(Matrix* mat, unsigned int row_src, unsigned int row_dest, m_type num)
 {
 	for(int i = 0; i < mat -> cols; i++)
 	{
-		mat -> arr[row_dest][i] += num * mat -> arr[row_src][i];
+		mat -> mat_arr[row_dest][i] += num * mat -> mat_arr[row_src][i];
 	}
 }
 
@@ -364,7 +366,7 @@ void m_row_scale(Matrix* mat, unsigned int row, m_type num)
 {
 	for(int i = 0; i < mat -> cols; i++)
 	{
-		mat -> arr[row][i] *= num;
+		mat -> mat_arr[row][i] *= num;
 	}
 }
 
