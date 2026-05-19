@@ -165,21 +165,34 @@ Vector* v_cross_prod(Vector* vec1, Vector* vec2)
 		printf("Error, dimensions do not match -- cannot compute cross product.\n");
 		return NULL;
 	}
-	Vector* vec_cross_prod = v_build(vec1 -> vec_size);
-	if(vec_cross_prod -> vec_size == 1)
+	Vector* vec_cross_prod = NULL;
+	V_TYPE new_x, new_y, new_z;
+	V_TYPE* vec1_arr = vec1 -> vec_arr;
+	V_TYPE* vec2_arr = vec2 -> vec_arr;
+	if(vec1 -> vec_size == 1)
 	{
-		// one-dimensional calculation
+		// one-dimensional calculation is undefined
+		printf("Error, dimensionality is too low.\n");
+		return NULL;
 	} 
-	else if(vec_cross_prod -> vec_size == 2)
+	else if(vec1 -> vec_size == 2)
 	{
-		// two-dimensional calculation
+		// two-dimensional calculation (returns 3D vector)
+		vec_cross_prod = v_build(3);
+		new_x = 0;
+		new_y = 0;
+		new_z = (vec1_arr[0] * vec2_arr[1]) - (vec1_arr[1] * vec2_arr[0]);
 	}
 	else if(vec_cross_prod -> vec_size == 3)
 	{
-		// three-dimensional calculation
-		//V_TYPE new_x = ;
-		//V_TYPE new_y = ;
-		//V_TYPE new_z = ;
+		// three-dimensional calculation of a x b
+		vec_cross_prod = v_build(3);
+		//V_TYPE new_x = aybz - azby;
+		new_x = (vec1_arr[1] * vec2_arr[2]) - (vec1_arr[2] * vec2_arr[1]);
+		//V_TYPE new_y = axbz - azbx;
+		new_y = (vec1_arr[0] * vec2_arr[2]) - (vec1_arr[2] * vec2_arr[0]);
+		//V_TYPE new_z = axby - aybx;
+		new_z = (vec1_arr[0] * vec2_arr[1]) - (vec1_arr[1] * vec2_arr[0]);
 	}
 	else
 	{
@@ -190,10 +203,22 @@ Vector* v_cross_prod(Vector* vec1, Vector* vec2)
 			vec_cross_prod -> vec_arr[i] = 0;
 		}
 	}
+	vec_cross_prod -> vec_arr[0] = new_x;
+	vec_cross_prod -> vec_arr[1] = new_y;
+	vec_cross_prod -> vec_arr[2] = new_z;
 	return vec_cross_prod;
 }
 
 // VECTOR OPERATIONS
+V_TYPE v_mag(Vector* vec)
+{
+	if(vec == NULL)
+	{
+		printf("Error, vector cannot be found -- cannot compute magnitude.\n");
+		return -1;
+	}
+	return 0;
+}
 
 // VECTOR UTILITY FUNCTIONS
 

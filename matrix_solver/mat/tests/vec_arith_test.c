@@ -49,7 +49,9 @@ int main(int argc, char* argv[])
 	printf("Dot product: %f\n", v_dprod3);
 
 	// v_cross_prod tests
-
+	Vector* v2_cprod = v_cross_prod(vec2_1, vec2_2);
+	v_print(v2_cprod);
+	v_destroy(v2_cprod);
 
 	// clean up used vectors
 	v_destroy(vec2_1);

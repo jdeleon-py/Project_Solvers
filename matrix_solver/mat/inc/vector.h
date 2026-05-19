@@ -32,6 +32,7 @@ V_TYPE v_dot_prod(Vector* vec1, Vector* vec2);    // return the dot product (int
 Vector* v_cross_prod(Vector* vec1, Vector* vec2); // return the cross product of two vectors
 
 // VECTOR OPERATIONS
+V_TYPE v_mag(Vector* vec);                        // returns the magnitude of a vector
 
 // VECTOR UTILITY FUNCTIONS
 
